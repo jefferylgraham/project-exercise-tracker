@@ -49,6 +49,35 @@ app.use((err, req, res, next) => {
     .send(errMessage);
 });
 
+//set up Schema
+var Schema = mongoose.Schema;
+
+//schema for users
+var userSchema = new Schema({
+  username: String
+});
+
+//schema for exercises
+var exerciseSchema = new Schema({
+  description: String,
+  duration: Number,
+  date: Date
+});
+
+//schema for displaying log
+var logSchema = new Schema({
+  _id: String,
+  username: String,
+  count: Number,
+  log: [exerciseSchema]
+});
+
+//
+app.post("/api/exercise/new-user", async (req, res) => {
+  try {
+  } catch (error) {}
+});
+
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
