@@ -34,7 +34,20 @@ app.post("/api/exercise/new-user", async (req, res) => {
     }
 
     var savedUser = await user.save();
-    return res.jsosn({ username: user.username, _id: user.id });
+    return res.json({ username: user.username, _id: user.id });
+  } catch (error) {}
+});
+
+app.post("/api/exercise/add", async (req, res) => {
+  try {
+    var exercise = new Exercise(req.body);
+    var savedExercise = await exercise.save();
+    return res.json({
+      userId: exercise.userId,
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date
+    });
   } catch (error) {}
 });
 
@@ -78,6 +91,7 @@ var userSchema = new Schema({
 
 //schema for exercises
 var exerciseSchema = new Schema({
+  userId: String,
   description: String,
   duration: Number,
   date: Date
@@ -92,6 +106,7 @@ var logSchema = new Schema({
 });
 
 var User = mongoose.model("User", userSchema);
+var Exercise = mongoose.model("Exercise", exerciseSchema);
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
