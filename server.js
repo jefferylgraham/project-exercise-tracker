@@ -27,9 +27,14 @@ app.post("/api/exercise/new-user", async (req, res) => {
   try {
     var user = new User(req.body);
 
+    //check to see if username already exists
+    var duplicate = await User.findOne({ username: user.username });
+    if (duplicate) {
+      return res.send("username already taken");
+    }
+
     var savedUser = await user.save();
-    console.log(user);
-    return res.json({ username: user.username, _id: user.id });
+    return res.jsosn({ username: user.username, _id: user.id });
   } catch (error) {}
 });
 
