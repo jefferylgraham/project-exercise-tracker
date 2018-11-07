@@ -41,6 +41,13 @@ app.post("/api/exercise/new-user", async (req, res) => {
 app.post("/api/exercise/add", async (req, res) => {
   try {
     var exercise = new Exercise(req.body);
+
+    //check to see if id is in db before saving exercise entry
+    var exerciseUserId = await User.findOne({ _id: exercise.userId });
+    if (!exerciseUserId) {
+      return res.send("unknown _id");
+    }
+
     var savedExercise = await exercise.save();
     return res.json({
       userId: exercise.userId,
