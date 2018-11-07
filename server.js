@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-
+const shortid = require("shortid");
 const cors = require("cors");
 
 const mongoose = require("mongoose");
@@ -21,6 +21,16 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
+});
+
+app.post("/api/exercise/new-user", async (req, res) => {
+  try {
+    var user = new User(req.body);
+
+    var savedUser = await user.save();
+    console.log(user);
+    return res.json({ username: user.username, _id: user.id });
+  } catch (error) {}
 });
 
 // Not found middleware
@@ -54,7 +64,11 @@ var Schema = mongoose.Schema;
 
 //schema for users
 var userSchema = new Schema({
-  username: String
+  username: String,
+  _id: {
+    type: String,
+    default: shortid.generate
+  }
 });
 
 //schema for exercises
@@ -72,11 +86,7 @@ var logSchema = new Schema({
   log: [exerciseSchema]
 });
 
-//
-app.post("/api/exercise/new-user", async (req, res) => {
-  try {
-  } catch (error) {}
-});
+var User = mongoose.model("User", userSchema);
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
