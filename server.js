@@ -60,6 +60,19 @@ app.post("/api/exercise/add", async (req, res) => {
   } catch (error) {}
 });
 
+app.get("/api/exercise/log?", async (req, res) => {
+  //get user id from request
+  var userId = req.query.userId;
+
+  var userExists = await User.findOne({ _id: userId });
+
+  if (!userExists) {
+    res.send("userId not found");
+  } else {
+    res.json({ _id: userId });
+  }
+});
+
 // Not found middleware
 app.use((req, res, next) => {
   return next({ status: 404, message: "not found" });
