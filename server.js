@@ -55,7 +55,7 @@ app.post("/api/exercise/add", async (req, res) => {
       description: exercise.description,
       duration: exercise.duration,
       _id: exercise.userId,
-      date: exercise.date
+      date: exercise.date.toDateString()
     });
   } catch (error) {}
 });
