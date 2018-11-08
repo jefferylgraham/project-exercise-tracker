@@ -44,15 +44,17 @@ app.post("/api/exercise/add", async (req, res) => {
 
     //check to see if id is in db before saving exercise entry
     var exerciseUserId = await User.findOne({ _id: exercise.userId });
+    console.log(exerciseUserId.username);
     if (!exerciseUserId) {
       return res.send("unknown _id");
     }
 
     var savedExercise = await exercise.save();
     return res.json({
-      userId: exercise.userId,
+      username: exerciseUserId.username,
       description: exercise.description,
       duration: exercise.duration,
+      _id: exercise.userId,
       date: exercise.date
     });
   } catch (error) {}
@@ -98,6 +100,7 @@ var userSchema = new Schema({
 
 //schema for exercises
 var exerciseSchema = new Schema({
+  username: String,
   userId: String,
   description: String,
   duration: Number,
