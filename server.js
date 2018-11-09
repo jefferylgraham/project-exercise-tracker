@@ -74,12 +74,18 @@ app.get("/api/exercise/log?", async (req, res) => {
         { userId: userId },
         "description duration date -_id"
       );
-      console.log(exercises);
+      //map exercises to format date correctly
+      var exercisesFormatted = exercises.map(obj => ({
+        description: obj.description,
+        duration: obj.duration,
+        date: obj.date.toDateString()
+      }));
+
       res.json({
         _id: userId,
         username: userExists.username,
         count: exercises.length,
-        log: exercises
+        log: exercisesFormatted
       });
     }
   } catch (error) {}
