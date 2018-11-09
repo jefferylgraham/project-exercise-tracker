@@ -70,7 +70,10 @@ app.get("/api/exercise/log?", async (req, res) => {
     if (!userExists) {
       res.send("userId not found");
     } else {
-      var exercises = await Exercise.find({ userId: userId });
+      var exercises = await Exercise.find(
+        { userId: userId },
+        "description duration date -_id"
+      );
       console.log(exercises);
       res.json({
         _id: userId,
