@@ -138,14 +138,6 @@ var exerciseSchema = new Schema({
   date: Date
 });
 
-//schema for displaying log
-var logSchema = new Schema({
-  _id: String,
-  username: String,
-  count: Number,
-  log: [exerciseSchema]
-});
-
 var User = mongoose.model("User", userSchema);
 var Exercise = mongoose.model("Exercise", exerciseSchema);
 
