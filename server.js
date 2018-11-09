@@ -61,16 +61,25 @@ app.post("/api/exercise/add", async (req, res) => {
 });
 
 app.get("/api/exercise/log?", async (req, res) => {
-  //get user id from request
-  var userId = req.query.userId;
+  try {
+    //get user id from request
+    var userId = req.query.userId;
 
-  var userExists = await User.findOne({ _id: userId });
+    var userExists = await User.findOne({ _id: userId });
 
-  if (!userExists) {
-    res.send("userId not found");
-  } else {
-    res.json({ _id: userId });
-  }
+    if (!userExists) {
+      res.send("userId not found");
+    } else {
+      var exercises = await Exercise.find({ userId: userId });
+      console.log(exercises);
+      res.json({
+        _id: userId,
+        username: userExists.username,
+        count: exercises.length,
+        log: exercises
+      });
+    }
+  } catch (error) {}
 });
 
 // Not found middleware
