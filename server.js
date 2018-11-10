@@ -64,8 +64,8 @@ app.get("/api/exercise/log?", async (req, res) => {
   try {
     //get user id from request
     var userId = req.query.userId;
-    var from = req.query.from || "1900-01-01";
-    var to = req.query.to || "3000-12-31";
+    var from = req.query.from || new Date(-8640000000000000);
+    var to = req.query.to || new Date(8640000000000000);
     var limit = req.query.limit;
 
     var userExists = await User.findOne({ _id: userId });
@@ -77,7 +77,9 @@ app.get("/api/exercise/log?", async (req, res) => {
       var exercises = await Exercise.find(
         { userId: userId, date: { $gt: from, $lt: to } },
         "description duration date -_id"
-      ).limit(parseInt(limit));
+      )
+        .limit(parseInt(limit))
+        .sort({ date: 1 });
       //map exercises to format date correctly
       console.log(exercises);
       var exercisesFormatted = exercises.map(obj => ({
