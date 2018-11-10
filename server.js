@@ -64,8 +64,8 @@ app.get("/api/exercise/log?", async (req, res) => {
   try {
     //get user id from request
     var userId = req.query.userId;
-    var from = req.query.from;
-    var to = req.query.to;
+    var from = req.query.from || "1900-01-01";
+    var to = req.query.to || "3000-12-31";
     var limit = req.query.limit;
 
     var userExists = await User.findOne({ _id: userId });
