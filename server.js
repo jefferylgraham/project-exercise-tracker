@@ -64,17 +64,22 @@ app.get("/api/exercise/log?", async (req, res) => {
   try {
     //get user id from request
     var userId = req.query.userId;
+    var from = req.query.from;
+    var to = req.query.to;
+    var limit = req.query.limit;
 
     var userExists = await User.findOne({ _id: userId });
 
+    //check to see if userId exists
     if (!userExists) {
       res.send("userId not found");
     } else {
       var exercises = await Exercise.find(
-        { userId: userId },
+        { userId: userId, date: { $gt: from, $lt: to } },
         "description duration date -_id"
-      );
+      ).limit(parseInt(limit));
       //map exercises to format date correctly
+      console.log(exercises);
       var exercisesFormatted = exercises.map(obj => ({
         description: obj.description,
         duration: obj.duration,
